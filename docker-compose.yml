@@ -1,0 +1,30 @@
+services:
+  db:
+    image: postgres:16
+    container_name: taskboard-db
+    environment:
+      - POSTGRES_USER=usr 
+      - POSTGRES_PASSWORD=passwd 
+      - POSTGRES_DB=postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U usr -d postgres"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    
+  backend:
+    image: goimage3
+    container_name: backend
+    restart: always
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=usr
+      - DB_PASSWORD=passwd
+      - DB_NAME=postgres
+    depends_on:
+     db:
+      condition: service_healthy
+    ports:
+      - "8080:8080"
