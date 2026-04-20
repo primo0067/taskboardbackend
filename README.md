@@ -7,9 +7,9 @@ REST API сервис для управления задачами.
 - Docker/ docker-compose
 - REST API
 ## Run localy
-git clone https://github.com/primo0067/taskboardbackend
-cd taskboardbackend
-docker compose up --build
+- git clone https://github.com/primo0067/taskboardbackend
+- cd taskboardbackend
+- docker compose up --build
 ## Architecture
 - handlers (HTTP layer)
 - db (database layer)
