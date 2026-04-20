@@ -13,7 +13,7 @@ func main() {
 
 	r.GET("/tasks", handlers.GetTasks)
 	r.GET("/tasks/:id", handlers.GetTask)
-	r.POST("/tasks", handlers.CreatTask)
+	r.POST("/tasks", handlers.CreateTask)
 	r.PUT("/tasks/:id", handlers.UpdateTask)
 	r.DELETE("/tasks/:id", handlers.DeleteTask)
 

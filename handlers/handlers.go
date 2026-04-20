@@ -9,7 +9,7 @@ import (
 )
 
 func GetTasks(c *gin.Context) {
-	rows, err := db.DB.Query("SELECT id, title, description, status, createdAT FROM tasks")
+	rows, err := db.DB.Query("SELECT id, title, description, status, created_at FROM tasks ORDER BY id DECS")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -35,7 +35,7 @@ func GetTask(c *gin.Context) {
 	var t models.Task
 
 	err := db.DB.QueryRow(
-		"SELECT id, title, description, status, createdAT FROM tasks WHERE id = $1", id,
+		"SELECT id, title, description, status, created_at FROM tasks WHERE id = $1", id,
 	).Scan(&t.ID, &t.Title, &t.Status, &t.Description, &t.CreatedAT)
 
 	if err != nil {
@@ -46,15 +46,19 @@ func GetTask(c *gin.Context) {
 	c.JSON(http.StatusOK, t)
 }
 
-func CreatTask(c *gin.Context) {
+func CreateTask(c *gin.Context) {
 	var t models.Task
+
 	if err := c.ShouldBindJSON(&t); err != nil {
+		if t.Title == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := db.DB.QueryRow(
-		"INSERT INFO tasks (title,description,status) VALUES ($1,$2,$3) RETURING id, createdAT",
+		"INSERT INFO tasks (title,description,status) VALUES ($1,$2,$3) RETURING id, created_at",
 		t.Title, t.Description, t.Status,
 	).Scan(&t.ID, &t.CreatedAT)
 
